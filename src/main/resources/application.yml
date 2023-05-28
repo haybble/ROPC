@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ropc
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    driver-class-name: ${ROPC_DB_DRIVER:org.postgresql.Driver}
+    username: ${ROPC_DB_USER:postgres}
+    password: ${ROPC_DB_PASSWORD:root}
+    url: ${ROPC_DB_URL:jdbc:postgresql://localhost:5432/ropc}
+    hikari:
+      auto-commit: true
+
+logging:
+  level:
+    root: info
+
+

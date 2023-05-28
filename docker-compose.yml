@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  db:
+    image: "postgres"
+    container_name: database
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ropc
+      POSTGRES_USER: postgres
+  ropc:
+    image: "ropc-service"
+    container_name: ropc
+    restart: on-failure
+    environment:
+       ROPC_DB_DRIVER: org.postgresql.Driver
+       ROPC_DB_USER: postgres
+       ROPC_DB_PASSWORD: password
+       ROPC_DB_URL: jdbc:postgresql://db:5432/ropc
+    ports:
+      - "8082:8080"
+    depends_on:
+      - db
