@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ropc-service
+  namespace: development
+  labels:
+    app: ropc-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ropc-service
+  template:
+    metadata:
+      labels:
+        app: ropc-service
+    spec:
+      containers:
+        - name: ropc-service-kube-container
+          image: haybble/ropc-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ROPC_DB_DRIVER
+              value: org.postgresql.Driver
+            - name: ROPC_DB_USER
+              value: postgres
+            - name: ROPC_DB_PASSWORD
+              value: password
+            - name: ROPC_DB_URL
+              value: jdbc:postgresql://ropc-db:5432/ropc
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ropc-db
+  namespace: development
+  labels:
+    app: ropc-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ropc-db
+  template:
+    metadata:
+      labels:
+        app: ropc-db
+    spec:
+      containers:
+        - name: ropc-db-kube-container
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_DB
+              value: ropc
+            - name: POSTGRES_USER
+              value: postgres
