@@ -1,14 +1,10 @@
 package com.haybble.ropc.service.serviceImpl
 
-import com.haybble.ropc.db.entities.Users
-import com.haybble.ropc.db.repository.UserRepository
 import com.haybble.ropc.dto.LoginRequest
 import com.haybble.ropc.security.TokenManager
 import com.haybble.ropc.security.UserSecurityService
 import com.haybble.ropc.service.UserService
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 
@@ -25,7 +21,10 @@ class UserServiceImpl(
 
 
     override fun authenticate(loginRequest: LoginRequest): Pair<UserDetails, String> {
-
+      val clientID =  loginRequest.clientId
+        if(clientID.isNullOrEmpty() ) {
+            throw RuntimeException("client Id cant be null")
+        }
         val username: String = loginRequest.username
         val userDetails: UserDetails = userSecurityService.loadUserByUsername(username)!!
         userSecurityService.check(loginRequest,userDetails)
