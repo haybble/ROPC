@@ -19,12 +19,14 @@ class UserServiceImpl(
     ) : UserService {
 
 
-
     override fun authenticate(loginRequest: LoginRequest): Pair<UserDetails, String> {
       val clientID =  loginRequest.clientId
         if(clientID.isNullOrEmpty() ) {
             throw RuntimeException("client Id cant be null")
         }
+
+        validateClientId(clientID)
+
         val username: String = loginRequest.username
         val userDetails: UserDetails = userSecurityService.loadUserByUsername(username)!!
         userSecurityService.check(loginRequest,userDetails)
@@ -33,7 +35,12 @@ class UserServiceImpl(
 
     }
 
-
+    private fun validateClientId(clientID: String)  {
+            if (clientID == "clientId") {
+                return
+            }
+            throw RuntimeException("client id is wrong")
+    }
 
 
 

@@ -37,7 +37,7 @@ class ServiceTest {
             user
         )
 
-        val loginRequest = LoginRequest("john", "123456", "client-id")
+        val loginRequest = LoginRequest("john", "123456", "clientId")
         Mockito.`when`(userSecurityService.loadUserByUsername("john")).thenReturn(userDetails)
         Mockito.`when`(tokenManager.createToken("john")).thenReturn("testToken")
         val result: Pair<UserDetails, String> = userService.authenticate(loginRequest)
@@ -47,11 +47,24 @@ class ServiceTest {
 
 
     @Test
-    fun test_clientId_is_not_null(){
+    fun test_clientId_should_not_be_null(){
         var loginRequest = LoginRequest("john","123456","")
-      assertThrows(RuntimeException::class.java) {
+
+            val result =   assertThrows(RuntimeException::class.java) {
             userService.authenticate(loginRequest)
         }
+
+        assertEquals(result.message,"client Id cant be null")
+    }
+
+
+    @Test
+    fun test_clientId_should_be_validated(){
+        var loginRequest = LoginRequest("john","123456","wrongclientid")
+      val result  =  assertThrows(RuntimeException::class.java) {
+            userService.authenticate(loginRequest)
+        }
+        assertEquals(result.message,"client id is wrong")
     }
 
 

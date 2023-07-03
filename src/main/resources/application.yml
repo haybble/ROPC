@@ -14,8 +14,13 @@ spring:
     hikari:
       auto-commit: true
 
+
+client-id:
+  validation:
+    url: http://localhost:8080/validateClientId
+
+
 logging:
   level:
     root: info
-
 
